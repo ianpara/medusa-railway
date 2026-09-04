@@ -1,15 +1,14 @@
-import { loadEnv, defineConfig } from "@medusajs/framework/utils"
+import { loadEnv, defineConfig } from "@medusajs/framework/utils";
 
-loadEnv(process.env.NODE_ENV || "production", process.cwd())
+loadEnv(process.env.NODE_ENV || "production", process.cwd());
 
 module.exports = defineConfig({
   projectConfig: {
     databaseUrl: process.env.DATABASE_URL,
     redisUrl: process.env.REDIS_URL,
-    workerMode: (process.env.MEDUSA_WORKER_MODE as
-      | "shared"
-      | "worker"
-      | "server") || "shared",
+    workerMode:
+      (process.env.MEDUSA_WORKER_MODE as "shared" | "worker" | "server") ||
+      "shared",
     http: {
       storeCors: process.env.STORE_CORS || "",
       adminCors: process.env.ADMIN_CORS || "",
@@ -25,8 +24,27 @@ module.exports = defineConfig({
     // "Failed to fetch" (mixed-content / cross-origin).
     backendUrl: process.env.BACKEND_URL || "",
     disable: process.env.DISABLE_MEDUSA_ADMIN === "true",
+    maxUploadFileSize: 10 * 1024 * 1024,
   },
   modules: [
     { key: "api_key", resolve: "@medusajs/medusa/api-key" },
+    {
+      resolve: "@medusajs/medusa/file",
+      options: {
+        providers: [
+          {
+            resolve:
+              "@tsc_tech/medusa-plugin-cloudinary/providers/file-cloudinary",
+            id: "cloudinary",
+            options: {
+              apiKey: process.env.CLOUDINARY_API_KEY,
+              apiSecret: process.env.CLOUDINARY_API_SECRET,
+              cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+              folderName: "medusa", // optional
+            },
+          },
+        ],
+      },
+    },
   ],
-})
+});
