@@ -24,27 +24,6 @@ module.exports = defineConfig({
     // "Failed to fetch" (mixed-content / cross-origin).
     backendUrl: process.env.BACKEND_URL || "",
     disable: process.env.DISABLE_MEDUSA_ADMIN === "true",
-    maxUploadFileSize: 20 * 1024 * 1024,
   },
-  modules: [
-    { key: "api_key", resolve: "@medusajs/medusa/api-key" },
-    {
-      resolve: "@medusajs/medusa/file",
-      options: {
-        providers: [
-          {
-            resolve:
-              "@tsc_tech/medusa-plugin-cloudinary/providers/file-cloudinary",
-            id: "cloudinary",
-            options: {
-              apiKey: process.env.CLOUDINARY_API_KEY,
-              apiSecret: process.env.CLOUDINARY_API_SECRET,
-              cloudName: process.env.CLOUDINARY_CLOUD_NAME,
-              folderName: "medusa", // optional
-            },
-          },
-        ],
-      },
-    },
-  ],
+  modules: [{ key: "api_key", resolve: "@medusajs/medusa/api-key" }],
 });
