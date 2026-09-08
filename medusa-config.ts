@@ -24,6 +24,7 @@ module.exports = defineConfig({
     // "Failed to fetch" (mixed-content / cross-origin).
     backendUrl: process.env.BACKEND_URL || "",
     disable: process.env.DISABLE_MEDUSA_ADMIN === "true",
+    maxUploadFileSize: 10 * 1024 * 1024,
   },
   modules: [
     { key: "api_key", resolve: "@medusajs/medusa/api-key" },
